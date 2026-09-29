@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer</title>
+</head>
+
+<body>
+
+    <h1>AI Resume Analyzer</h1>
+
+    <p>Upload your resume and analyze your skills.</p>
+
+    <form action="/analyze" method="POST" enctype="multipart/form-data">
+
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
+
+        <br><br>
+
+        <button type="submit">Analyze Resume</button>
+
+    </form>
+    {% if resume_text %}
+
+<hr>
+
+<h2>Detected Skills</h2>
+
+<ul>
+    {% for skill in skills %}
+        <li>{{ skill }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Extracted Resume Text</h2>
+
+<pre>{{ resume_text }}</pre>
+
+{% endif %}
+
+</body>
+</html>

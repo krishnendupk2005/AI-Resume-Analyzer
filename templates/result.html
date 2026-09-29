@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analysis Result</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .score-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .score-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            background: conic-gradient(
+                #2457c5 calc(var(--score) * 1%),
+                #e5e7eb 0
+            );
+        }
+
+        .score-circle::before {
+            content: "";
+            position: absolute;
+            width: 125px;
+            height: 125px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .score-number {
+            position: relative;
+            z-index: 1;
+            font-size: 35px;
+            font-weight: bold;
+            color: #2457c5;
+        }
+
+        .score-number span {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .score-text {
+            color: #666;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill {
+            background: #e8f0ff;
+            color: #2457c5;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .recommendations {
+            padding-left: 25px;
+            line-height: 1.8;
+        }
+
+        .recommendations li {
+            margin-bottom: 10px;
+        }
+
+        .resume-text {
+            background: #f7f7f7;
+            padding: 20px;
+            border-radius: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            background: #222;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background: #444;
+        }
+
+        .empty {
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>📄 Resume Analysis Result</h1>
+
+        <p>
+            AI-powered analysis of your resume
+        </p>
+
+    </div>
+
+
+    <!-- RESUME SCORE -->
+
+    <div class="score-card">
+
+        <h2>Resume Score</h2>
+
+        <div class="score-circle" style="--score: {{ score }};">
+
+            <div class="score-number">
+
+                {{ score }}
+
+                <span>/100</span>
+
+            </div>
+
+        </div>
+
+        <p class="score-text">
+
+    {% if score >= 90 %}
+        🌟 Excellent resume! Your resume is well structured and contains strong information.
+    {% elif score >= 75 %}
+        👍 Good resume! A few improvements can make it even stronger.
+    {% elif score >= 60 %}
+        ⚡ Your resume is okay, but it needs some improvements.
+    {% else %}
+        🔧 Your resume needs improvement. Follow the recommendations below.
+
+    {% endif %}
+
+</p>
+
+    
+
+    </div>
+
+
+    <!-- AI RECOMMENDATIONS -->
+
+    <div class="section">
+
+        <h2>💡 AI Recommendations</h2>
+
+        {% if recommendations %}
+
+            <ul class="recommendations">
+
+                {% for recommendation in recommendations %}
+
+                    <li>
+                        {{ recommendation }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        {% else %}
+
+            <p class="empty">
+
+                Your resume looks good!
+                No major suggestions at this time.
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- SUGGESTED SKILLS -->
+
+    <div class="section">
+
+        <h2>📌 Suggested Skills to Add</h2>
+
+        {% if missing_skills %}
+
+            <div class="skills">
+
+                {% for skill in missing_skills %}
+
+                    <span class="skill">
+                        {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="empty">
+
+                No major skills are missing. Great job!
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- DETECTED SKILLS -->
+
+    <div class="section">
+
+        <h2>🛠️ Detected Skills</h2>
+
+        <div class="skills">
+
+            {% if skills %}
+
+                {% for skill in skills %}
+
+                    <span class="skill">
+                        {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="empty">
+
+                    No skills detected.
+
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- EXTRACTED RESUME TEXT -->
+
+    <div class="section">
+
+        <h2>📑 Extracted Resume Text</h2>
+
+        <div class="resume-text">
+
+            {{ text }}
+
+        </div>
+
+    </div>
+
+
+    <!-- BUTTON -->
+
+    <div style="text-align:center;">
+
+        <a href="/" class="button">
+
+            ← Analyze Another Resume
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
